@@ -17,6 +17,8 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   spec = { { import = "plugins" } },
   install = { colorscheme = { "kanagawa" } },
+  rocks = { enabled = false }, -- no plugins need luarocks; skip the hererocks bootstrap
+
   checker = { enabled = true, notify = false }, -- background update checks
   change_detection = { notify = false },
 })
