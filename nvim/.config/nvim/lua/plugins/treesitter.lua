@@ -6,6 +6,11 @@
 -- Instead: you install parsers with `require('nvim-treesitter').install{...}` and
 -- enable Neovim's built-in treesitter features per-buffer (`vim.treesitter.start()`,
 -- `indentexpr`). `master` is frozen and crashes on Neovim 0.12's injection handling.
+--
+-- REQUIRES the `tree-sitter` CLI on PATH (Arch: `tree-sitter-cli`) + a C compiler:
+-- the `main` branch builds parsers from grammar source with `tree-sitter build`,
+-- whereas `master` shipped a self-contained compile step. Without it, parser
+-- installation fails with `ENOENT ... 'tree-sitter'` and highlighting won't work.
 
 local parsers = {
   "lua",
@@ -33,8 +38,16 @@ return {
     { "nvim-treesitter/nvim-treesitter-textobjects", branch = "main" },
   },
   config = function()
-    -- Install/keep the listed parsers up to date (async; skips already-installed).
-    require("nvim-treesitter").install(parsers)
+    -- Install only parsers that aren't present yet. Calling install() with the
+    -- full list on every startup makes `main` re-download/rebuild all of them, so
+    -- filter against what's already installed first.
+    local installed = require("nvim-treesitter.config").get_installed("parsers")
+    local missing = vim.tbl_filter(function(lang)
+      return not vim.tbl_contains(installed, lang)
+    end, parsers)
+    if #missing > 0 then
+      require("nvim-treesitter").install(missing)
+    end
 
     -- Enable highlighting + indentation for a buffer, auto-installing the parser
     -- if it isn't present yet (replaces the old `auto_install = true`).
