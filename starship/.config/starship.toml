@@ -1,0 +1,55 @@
+# Starship config — tuned to resemble the old Spaceship prompt, but ~10ms instead
+# of ~280ms. Starship shows language/tool modules only in relevant directories,
+# so the prompt stays fast and uncluttered. Docs: https://starship.rs/config/
+
+add_newline = true # blank line before each prompt, like Spaceship
+
+# Spaceship-style arrow character (green on success, red on failure).
+[character]
+success_symbol = "[➜](bold green)"
+error_symbol = "[➜](bold red)"
+vimcmd_symbol = "[❮](bold green)"
+
+[directory]
+truncation_length = 3
+truncate_to_repo = false
+style = "bold cyan"
+
+[git_branch]
+symbol = " "
+style = "bold purple"
+
+[git_status]
+style = "bold red"
+
+# "took 5s" after long commands, like Spaceship's exec_time section.
+[cmd_duration]
+min_time = 2000
+format = "took [$duration]($style) "
+style = "bold yellow"
+
+# Kubernetes context (off by default in Starship). Handy given your Talos/k8s work.
+# Scoped via detect_* so it ONLY shows in directories that look like k8s projects,
+# instead of on every prompt whenever a kube context happens to be set.
+[kubernetes]
+disabled = false
+detect_files = ['Chart.yaml', 'skaffold.yaml', 'kustomization.yaml', 'talosconfig']
+detect_folders = ['k8s', 'kubernetes', 'helm', '.helm', 'manifests']
+format = 'on [⛵ $context\($namespace\)](dimmed cyan) '
+
+[python]
+symbol = " "
+
+[nodejs]
+symbol = " "
+
+[golang]
+symbol = " "
+
+[rust]
+symbol = " "
+
+# gcloud account/project on every prompt is noise (Spaceship didn't show it).
+# Re-enable by removing this if you want the active GCP account visible.
+[gcloud]
+disabled = true
