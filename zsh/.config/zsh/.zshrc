@@ -1,8 +1,8 @@
 #
 # Executes commands at the start of an interactive session.
 #
-# Authors:
-#   Sorin Ionescu <sorin.ionescu@gmail.com>
+# NOTE: this file is tracked in a PUBLIC dotfiles repo. Never put secrets here —
+# put them in $ZDOTDIR/secrets.zsh, which is gitignored and sourced below.
 #
 
 # Source Prezto.
@@ -10,42 +10,48 @@ if [[ -s "$HOME/.zprezto/init.zsh" ]]; then
   source "$HOME/.zprezto/init.zsh"
 fi
 
-# Deno
-export DENO_INSTALL="/home/jait/.deno"
-export FLYCTL_INSTALL="/home/jait/.fly"
+# Deno / Fly
+export DENO_INSTALL="$HOME/.deno"
+export FLYCTL_INSTALL="$HOME/.fly"
 export PATH="$DENO_INSTALL/bin:$FLYCTL_INSTALL/bin:$PATH"
 
-# Created by `pipx` on 2024-04-19 11:58:50
-export PATH="$PATH:/home/jait/.local/bin"
+# pipx / user binaries (also added by .zprofile; guard against duplicates)
+[[ ":$PATH:" == *":$HOME/.local/bin:"* ]] || export PATH="$PATH:$HOME/.local/bin"
 
-export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+# n (node version manager)
+export N_PREFIX="$HOME/n"
+[[ ":$PATH:" == *":$N_PREFIX/bin:"* ]] || export PATH="$PATH:$N_PREFIX/bin"
 
 # Turso
-export PATH="$PATH:/home/jait/.turso"
+[[ ":$PATH:" == *":$HOME/.turso:"* ]] || export PATH="$PATH:$HOME/.turso"
 
-# Generated for envman. Do not edit.
-[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/jait/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/home/jait/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/home/jait/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/jait/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-eval "$(mise activate zsh)"
-
-alias p="pnpm"
-alias gro="gir --hard @{u}"
-
-# add Pulumi to the PATH
-export PATH=$PATH:/home/jait/.pulumi/bin
+# Pulumi
+[[ ":$PATH:" == *":$HOME/.pulumi/bin:"* ]] || export PATH="$PATH:$HOME/.pulumi/bin"
 
 # pnpm
-export PNPM_HOME="/home/jait/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-alias claude="/home/jait/.claude/local/claude"
+export PNPM_HOME="$HOME/.local/share/pnpm"
+[[ ":$PATH:" == *":$PNPM_HOME:"* ]] || export PATH="$PNPM_HOME:$PATH"
+
+# envman
+[[ -s "$HOME/.config/envman/load.sh" ]] && source "$HOME/.config/envman/load.sh"
+
+# Google Cloud SDK (TODO: relocate out of ~/Downloads to e.g. ~/.local/share)
+GCLOUD_SDK="$HOME/Downloads/google-cloud-sdk"
+[[ -f "$GCLOUD_SDK/path.zsh.inc" ]] && source "$GCLOUD_SDK/path.zsh.inc"
+[[ -f "$GCLOUD_SDK/completion.zsh.inc" ]] && source "$GCLOUD_SDK/completion.zsh.inc"
+
+# mise (runtime version manager)
+eval "$(mise activate zsh)"
+
+# Aliases
+alias p="pnpm"
+# NOTE: `gir` is not a command — this alias has never worked. Did you mean
+# `git reset --hard @{u}`? Left as-is because that would be destructive.
+alias gro="gir --hard @{u}"
+alias claude="$HOME/.claude/local/claude"
+
+# Secrets (API keys, tokens). Gitignored — see secrets.zsh.example.
+[[ -f "$ZDOTDIR/secrets.zsh" ]] && source "$ZDOTDIR/secrets.zsh"
 
 # Starship prompt (replaces Spaceship — see ~/.config/starship.toml). Keep this
 # last so it initializes after Prezto and wins the prompt.

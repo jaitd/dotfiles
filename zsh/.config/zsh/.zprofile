@@ -72,5 +72,6 @@ if [[ -z "$LESSOPEN" ]] && (( $#commands[(i)lesspipe(|.sh)] )); then
   export LESSOPEN="| /usr/bin/env $commands[(i)lesspipe(|.sh)] %s 2>&-"
 fi
 
-# Created by `pipx` on 2024-04-19 11:58:50
-export PATH="$PATH:/home/jait/.local/bin"
+# Created by `pipx` on 2024-04-19 11:58:50 (guarded so it isn't appended twice
+# when PATH is already inherited from a parent shell).
+[[ ":$PATH:" == *":$HOME/.local/bin:"* ]] || export PATH="$PATH:$HOME/.local/bin"
