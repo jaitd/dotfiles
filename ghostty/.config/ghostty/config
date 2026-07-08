@@ -1,0 +1,51 @@
+# Ghostty config. Docs: https://ghostty.org/docs/config
+# Reload after editing with Ctrl+Shift+, (or restart Ghostty).
+# NOTE: Ghostty has no inline comments — keep '#' notes on their own line.
+
+# ── Theme ────────────────────────────────────────────────────────────────
+# Matches the nvim colorscheme (kanagawa). Auto-switches with the system
+# light/dark preference: Wave (dark) <-> Lotus (light).
+theme = dark:Kanagawa Wave,light:Kanagawa Lotus
+
+# ── Font ─────────────────────────────────────────────────────────────────
+# Ghostty bundles JetBrains Mono + Nerd Font glyphs, so starship/nvim icons
+# render out of the box. Swap font-family for another installed font if you
+# like, e.g. "Inconsolata Nerd Font Mono".
+font-size = 13
+# font-family = "JetBrains Mono"
+# Slightly heavier glyphs, nicer on non-HiDPI:
+font-thicken = true
+
+# ── Window ───────────────────────────────────────────────────────────────
+window-padding-x = 8
+window-padding-y = 6
+window-padding-balance = true
+# Set background-opacity below 1.0 (e.g. 0.95) for a translucent look.
+background-opacity = 1.0
+# Restore windows/splits after a restart:
+window-save-state = always
+
+# ── UX ───────────────────────────────────────────────────────────────────
+mouse-hide-while-typing = true
+# Selecting text copies it (tmux-style):
+copy-on-select = clipboard
+# Don't prompt when closing a pane/window:
+confirm-close-surface = false
+cursor-style = block
+cursor-style-blink = false
+
+# ── Shell integration (zsh via Prezto) ───────────────────────────────────
+# Cursor shaping, `sudo` awareness, and automatic window titles.
+shell-integration = zsh
+shell-integration-features = cursor,sudo,title
+
+# ── Keybindings ──────────────────────────────────────────────────────────
+# Splits:
+keybind = ctrl+shift+e=new_split:right
+keybind = ctrl+shift+o=new_split:down
+keybind = ctrl+shift+w=close_surface
+# Jump between splits with Ctrl+Alt+<arrows>:
+keybind = ctrl+alt+left=goto_split:left
+keybind = ctrl+alt+right=goto_split:right
+keybind = ctrl+alt+up=goto_split:up
+keybind = ctrl+alt+down=goto_split:down
