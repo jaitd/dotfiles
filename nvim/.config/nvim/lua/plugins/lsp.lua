@@ -92,7 +92,12 @@ return {
           "jsonls",
         },
         -- automatic_enable is on by default: it calls vim.lsp.enable() for each
-        -- installed server, so nothing else is needed here.
+        -- server mason has installed. It treats *every* mason package as a
+        -- server, so formatters must be excluded or it tries to run them as
+        -- language servers (e.g. `stylua --lsp`, which stylua doesn't support
+        -- -> "client stylua quit with exit code 2"). stylua is a formatter and
+        -- is configured in conform.nvim (see plugins/formatting.lua).
+        automatic_enable = { exclude = { "stylua" } },
       })
     end,
   },
