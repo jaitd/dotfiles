@@ -38,11 +38,14 @@ else
   missing=$((missing + 1))
 fi
 
+# These dotfiles pin nvim-treesitter to its `main` branch, which needs nvim >= 0.12.
 if command -v nvim >/dev/null 2>&1; then
   nvim_ver=$(nvim --version | head -1 | grep -oE '[0-9]+\.[0-9]+' | head -1)
-  branch=$(git -C "$DOTFILES" branch --show-current 2>/dev/null || echo '?')
-  if [[ "$branch" == "neovim-12" ]] && [[ "$(printf '%s\n0.12\n' "$nvim_ver" | sort -V | head -1)" != "0.12" ]]; then
-    warn "on branch neovim-12 but nvim is $nvim_ver — that branch needs >= 0.12"
+  if [[ "$(printf '%s\n0.12\n' "$nvim_ver" | sort -V | head -1)" != "0.12" ]]; then
+    warn "nvim is $nvim_ver — these dotfiles need >= 0.12 (nvim-treesitter main branch)"
+    missing=$((missing + 1))
+  else
+    ok "nvim $nvim_ver (>= 0.12)"
   fi
 fi
 

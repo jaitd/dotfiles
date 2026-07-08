@@ -71,13 +71,24 @@ $EDITOR secrets.zsh          # export GEMINI_API_KEY="..." etc.
 
 `.zshrc` sources `$ZDOTDIR/secrets.zsh` when present. It is gitignored.
 
-## Branches
+## Neovim 0.12 requirement
 
-| Branch | Use it when |
-|--------|-------------|
-| `main` | Shared baseline. Neovim < 0.12 (nvim-treesitter `master`). |
-| `neovim-12` | `main` + treesitter on nvim-treesitter's `main` branch. **Requires Neovim 0.12 and `tree-sitter-cli`.** |
+`main` is the only branch. It **requires Neovim ≥ 0.12 and the `tree-sitter`
+CLI** (`tree-sitter-cli`), because nvim-treesitter is pinned to its `main`
+branch.
 
-nvim-treesitter's `master` branch is frozen and crashes on Neovim 0.12's
-treesitter injection handling, so 0.12 machines need `neovim-12`. Shared changes
-(zsh, starship, ghostty) land on `main` and get cherry-picked onto `neovim-12`.
+Why: nvim-treesitter's `master` branch is frozen upstream and crashes on
+Neovim 0.12's treesitter injection handling (`vim.treesitter.get_range` receives
+a nil node → `attempt to call method 'range' (a nil value)`). Its `main` branch
+is the supported path, and it builds parsers from source with the `tree-sitter`
+CLI — without that binary, parser installs fail with `ENOENT ... 'tree-sitter'`
+and highlighting silently won't work.
+
+Before pulling these dotfiles onto a machine:
+
+```sh
+nvim --version | head -1        # must be >= 0.12
+sudo pacman -S tree-sitter-cli  # required to build parsers
+```
+
+`install.sh` checks both and warns if either is missing.
