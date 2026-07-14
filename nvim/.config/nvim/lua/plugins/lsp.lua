@@ -80,6 +80,23 @@ return {
         end,
       })
 
+      -- Rust. rust-analyzer is installed via rustup (`rustup component add
+      -- rust-analyzer`) so it stays version-matched to the toolchain, rather
+      -- than through mason. It provides diagnostics/errors, completion,
+      -- formatting (rustfmt) and — with check.command = "clippy" — clippy lints
+      -- on save. Because it's not a mason package, mason-lspconfig's
+      -- automatic_enable won't touch it, so enable it explicitly below.
+      vim.lsp.config("rust_analyzer", {
+        settings = {
+          ["rust-analyzer"] = {
+            check = { command = "clippy" }, -- run clippy (not just cargo check) for diagnostics
+            cargo = { allTargets = true },
+            procMacro = { enable = true },
+          },
+        },
+      })
+      vim.lsp.enable("rust_analyzer")
+
       require("mason-lspconfig").setup({
         ensure_installed = {
           "lua_ls",
