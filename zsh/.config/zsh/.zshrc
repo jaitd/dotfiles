@@ -32,6 +32,10 @@ export N_PREFIX="$HOME/n"
 export PNPM_HOME="$HOME/.local/share/pnpm"
 [[ ":$PATH:" == *":$PNPM_HOME:"* ]] || export PATH="$PNPM_HOME:$PATH"
 
+# Rust / cargo — rustup manages the toolchain; `cargo install` drops binaries
+# into ~/.cargo/bin (e.g. cargo-expand), which must be on PATH to run them.
+[[ ":$PATH:" == *":$HOME/.cargo/bin:"* ]] || export PATH="$PATH:$HOME/.cargo/bin"
+
 # envman
 [[ -s "$HOME/.config/envman/load.sh" ]] && source "$HOME/.config/envman/load.sh"
 
@@ -56,3 +60,4 @@ alias claude="$HOME/.claude/local/claude"
 # Starship prompt (replaces Spaceship — see ~/.config/starship.toml). Keep this
 # last so it initializes after Prezto and wins the prompt.
 eval "$(starship init zsh)"
+. "/tmp/claude-1000/-home-jait-dev-237labs-certifications-standalone/41fa2a16-01f0-4919-9b7c-5bc45983768a/scratchpad/deno-latest/env"
