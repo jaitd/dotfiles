@@ -52,6 +52,14 @@ return {
           },
         },
       },
+      extensions = {
+        advanced_git_search = {
+          -- use diffview.nvim for the "open diff" actions
+          diff_plugin = "diffview",
+          -- hide duplicates of telescope's own git pickers
+          show_builtin_git_pickers = false,
+        },
+      },
     })
     pcall(telescope.load_extension, "fzf")
   end,
