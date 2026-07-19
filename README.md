@@ -13,6 +13,7 @@ Personal dotfiles, managed with [GNU Stow](https://gnu.org/software/stow/).
 | `starship` | `~/.config/starship.toml`     | [Starship](https://starship.rs) prompt (kanagawa, ~5ms) |
 | `nvim`     | `~/.config/nvim/`             | Neovim, lazy.nvim, LSP + treesitter |
 | `ghostty`  | `~/.config/ghostty/config`    | [Ghostty](https://ghostty.org) terminal |
+| `claude`   | `~/.claude/statusline.sh`     | Claude Code statusline, rendered by Starship to match the shell prompt |
 
 ## Install
 
@@ -40,6 +41,7 @@ cd ~/dev/dotfiles
 | `ghostty` | terminal | `ghostty` |
 | a Nerd Font | prompt/editor glyphs | `ttf-font-nerd` (Ghostty bundles one too) |
 | `mise` | runtime version manager (used by `.zshrc`) | `mise` |
+| `jq` | parses Claude Code's statusline JSON | `jq` |
 
 Prezto (the framework itself is *not* vendored here):
 

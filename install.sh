@@ -7,7 +7,7 @@
 set -euo pipefail
 
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ALL_PACKAGES=(zsh starship nvim ghostty)
+ALL_PACKAGES=(zsh starship nvim ghostty claude)
 PACKAGES=("${@:-}")
 [[ -z "${PACKAGES[*]}" ]] && PACKAGES=("${ALL_PACKAGES[@]}")
 
@@ -29,6 +29,7 @@ check nvim        "the editor"                         neovim
 check tree-sitter "builds nvim treesitter parsers"     tree-sitter-cli
 check ghostty     "the terminal"                       ghostty
 check mise        "runtime version manager (.zshrc)"   mise
+check jq          "parses Claude Code statusline JSON"  jq
 
 if [[ -d "$HOME/.zprezto" ]]; then
   ok "prezto (~/.zprezto)"

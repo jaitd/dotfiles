@@ -4,6 +4,13 @@
 
 add_newline = true # blank line before each prompt, like Spaceship
 
+# Claude Code's statusline reuses this same config via `starship prompt --profile
+# claude` (see ~/.claude/statusline.sh), so the two prompts stay in sync — edit a
+# module below and both update. The profile drops [character] and the leading
+# newline, which only make sense for an interactive shell.
+[profiles]
+claude = "$directory$git_branch$git_status$kubernetes$python$nodejs$golang$rust"
+
 # Spaceship-style arrow character (green on success, red on failure).
 [character]
 success_symbol = "[➜](bold green)"
