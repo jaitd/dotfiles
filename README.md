@@ -13,7 +13,14 @@ Personal dotfiles, managed with [GNU Stow](https://gnu.org/software/stow/).
 | `starship` | `~/.config/starship.toml`     | [Starship](https://starship.rs) prompt (kanagawa, ~5ms) |
 | `nvim`     | `~/.config/nvim/`             | Neovim, lazy.nvim, LSP + treesitter |
 | `ghostty`  | `~/.config/ghostty/config`    | [Ghostty](https://ghostty.org) terminal |
-| `claude`   | `~/.claude/statusline.sh`     | Claude Code statusline, rendered by Starship to match the shell prompt |
+| `claude`   | `~/.claude/`, `~/.claude-personal/` | Claude Code settings + statusline, rendered by Starship to match the shell prompt |
+
+The `claude` package covers both accounts: the default profile in `~/.claude`,
+and the personal one in `~/.claude-personal` that the `claude-personal` alias
+selects via `CLAUDE_CONFIG_DIR`. Both point their statusline at the single
+`~/.claude/statusline.sh` symlink, which badges the line with the active
+profile (` default` / `󰋜 personal`) so it is obvious which account a session
+is billing to.
 
 ## Install
 
