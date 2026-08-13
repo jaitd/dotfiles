@@ -60,16 +60,10 @@ GCLOUD_SDK="$HOME/Downloads/google-cloud-sdk"
 # mise (runtime version manager)
 eval "$(mise activate zsh)"
 
-# Aliases
-alias p="pnpm"
-# NOTE: `gir` is not a command — this alias has never worked. Did you mean
-# `git reset --hard @{u}`? Left as-is because that would be destructive.
-alias gro="gir --hard @{u}"
-alias claude="$HOME/.claude/local/claude"
-
-# Aliases proper, sourced last so they win over the three defined above.
-# Guarded rather than assumed: this file is stowed, and a partial checkout or a
-# not-yet-run install.sh should degrade to a working shell, not an error.
+# Aliases — all of them, in aliases.zsh. Keeping a second set inline here is
+# what let the sourcing line go missing without anyone noticing.
+# Guarded rather than assumed: a partial checkout or a not-yet-run install.sh
+# should degrade to a working shell, not an error.
 [[ -r "$ZDOTDIR/aliases.zsh" ]] && source "$ZDOTDIR/aliases.zsh"
 
 # fzf keybindings and completion
