@@ -31,11 +31,14 @@ check ghostty     "the terminal"                       ghostty
 check mise        "runtime version manager (.zshrc)"   mise
 check jq          "parses Claude Code statusline JSON"  jq
 
-if [[ -d "$HOME/.zprezto" ]]; then
+zprezto="${XDG_CONFIG_HOME:-$HOME/.config}/zsh/.zprezto"
+if [[ -d "$zprezto" ]]; then
+  ok "prezto ($zprezto)"
+elif [[ -d "$HOME/.zprezto" ]]; then
   ok "prezto (~/.zprezto)"
 else
   warn "prezto missing — clone it:"
-  printf '      git clone --recursive https://github.com/sorin-ionescu/prezto.git ~/.zprezto\n'
+  printf '      git clone --recursive https://github.com/sorin-ionescu/prezto.git "%s"\n' "$zprezto"
   missing=$((missing + 1))
 fi
 

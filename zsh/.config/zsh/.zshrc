@@ -5,18 +5,31 @@
 # put them in $ZDOTDIR/secrets.zsh, which is gitignored and sourced below.
 #
 
-# Source Prezto.
-if [[ -s "$HOME/.zprezto/init.zsh" ]]; then
+# Source Prezto. It is installed under $ZDOTDIR here; $HOME/.zprezto is the
+# upstream default and stays as a fallback. Checking only the latter is how this
+# file silently ran without Prezto at all.
+if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+elif [[ -s "$HOME/.zprezto/init.zsh" ]]; then
   source "$HOME/.zprezto/init.zsh"
 fi
+
+# Completions installed outside Prezto's fpath (deno, etc).
+[[ -d "$ZDOTDIR/completions" && ":$FPATH:" != *":$ZDOTDIR/completions:"* ]] \
+  && export FPATH="$ZDOTDIR/completions:$FPATH"
 
 # Deno / Fly
 export DENO_INSTALL="$HOME/.deno"
 export FLYCTL_INSTALL="$HOME/.fly"
 export PATH="$DENO_INSTALL/bin:$FLYCTL_INSTALL/bin:$PATH"
+[[ -s "$HOME/.deno/env" ]] && source "$HOME/.deno/env"
 
 # pipx / user binaries (also added by .zprofile; guard against duplicates)
 [[ ":$PATH:" == *":$HOME/.local/bin:"* ]] || export PATH="$PATH:$HOME/.local/bin"
+[[ -s "$HOME/.local/bin/env" ]] && source "$HOME/.local/bin/env"
+
+# opencode
+[[ ":$PATH:" == *":$HOME/.opencode/bin:"* ]] || export PATH="$HOME/.opencode/bin:$PATH"
 
 # n (node version manager)
 export N_PREFIX="$HOME/n"
@@ -54,10 +67,12 @@ alias p="pnpm"
 alias gro="gir --hard @{u}"
 alias claude="$HOME/.claude/local/claude"
 
+# fzf keybindings and completion
+[[ -f "$HOME/.fzf.zsh" ]] && source "$HOME/.fzf.zsh"
+
 # Secrets (API keys, tokens). Gitignored — see secrets.zsh.example.
 [[ -f "$ZDOTDIR/secrets.zsh" ]] && source "$ZDOTDIR/secrets.zsh"
 
 # Starship prompt (replaces Spaceship — see ~/.config/starship.toml). Keep this
 # last so it initializes after Prezto and wins the prompt.
 eval "$(starship init zsh)"
-. "/tmp/claude-1000/-home-jait-dev-237labs-certifications-standalone/41fa2a16-01f0-4919-9b7c-5bc45983768a/scratchpad/deno-latest/env"
