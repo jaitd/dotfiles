@@ -67,6 +67,11 @@ alias p="pnpm"
 alias gro="gir --hard @{u}"
 alias claude="$HOME/.claude/local/claude"
 
+# Aliases proper, sourced last so they win over the three defined above.
+# Guarded rather than assumed: this file is stowed, and a partial checkout or a
+# not-yet-run install.sh should degrade to a working shell, not an error.
+[[ -r "$ZDOTDIR/aliases.zsh" ]] && source "$ZDOTDIR/aliases.zsh"
+
 # fzf keybindings and completion
 [[ -f "$HOME/.fzf.zsh" ]] && source "$HOME/.fzf.zsh"
 
