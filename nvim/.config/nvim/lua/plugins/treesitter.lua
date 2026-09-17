@@ -23,6 +23,7 @@ local parsers = {
   "html",
   "css",
   "json",
+  "toml",
   "yaml",
   "markdown",
   "markdown_inline", -- needed for fenced-code-block injections in markdown

@@ -55,6 +55,7 @@ return {
     opts = {
       filters = { custom = { "^\\.git$" } },
       -- don't open an inotify watcher per file in huge dirs (avoids ENOSPC)
+      -- Keep nvim-tree's default mappings: open nodes on double-click.
       filesystem_watchers = {
         enable = true,
         debounce_delay = 50,

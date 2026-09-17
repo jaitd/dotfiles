@@ -107,14 +107,15 @@ return {
           "html",
           "cssls",
           "jsonls",
+          "taplo", -- TOML formatting via conform.nvim
         },
         -- automatic_enable is on by default: it calls vim.lsp.enable() for each
         -- server mason has installed. It treats *every* mason package as a
         -- server, so formatters must be excluded or it tries to run them as
         -- language servers (e.g. `stylua --lsp`, which stylua doesn't support
-        -- -> "client stylua quit with exit code 2"). stylua is a formatter and
-        -- is configured in conform.nvim (see plugins/formatting.lua).
-        automatic_enable = { exclude = { "stylua" } },
+        -- -> "client stylua quit with exit code 2"). Formatters are configured
+        -- in conform.nvim (see plugins/formatting.lua), not enabled as LSPs.
+        automatic_enable = { exclude = { "stylua", "taplo" } },
       })
     end,
   },

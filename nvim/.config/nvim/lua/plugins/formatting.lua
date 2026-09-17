@@ -2,6 +2,7 @@
 -- formatters are on PATH (mason can install prettier/stylua/etc.).
 return {
   "stevearc/conform.nvim",
+  dependencies = { "mason-org/mason.nvim" },
   event = { "BufWritePre" },
   keys = {
     {
@@ -25,12 +26,25 @@ return {
       css = { "prettier" },
       scss = { "prettier" },
       json = { "prettier" },
-      yaml = { "prettier" },
+      yaml = { "yamlfmt" },
       markdown = { "prettier" },
+      toml = { "taplo" },
     },
     format_on_save = {
       timeout_ms = 1000,
       lsp_format = "fallback",
     },
   },
+  config = function(_, opts)
+    require("conform").setup(opts)
+
+    -- Taplo is a formatter, not an LSP server; install it through Mason.
+    local ok, registry = pcall(require, "mason-registry")
+    if ok then
+      local package = registry.get_package("taplo")
+      if not package:is_installed() then
+        package:install()
+      end
+    end
+  end,
 }

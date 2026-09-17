@@ -19,6 +19,9 @@ o.showcmd = true
 o.wildmenu = true
 o.termguicolors = true -- required for truecolour themes
 o.signcolumn = "yes" -- stable gutter width for gitsigns / diagnostics
+-- Show each split's buffer name at the top of its window.
+-- %t is the filename, and %m marks modified buffers.
+o.winbar = " %t %m"
 
 -- search
 o.incsearch = true
