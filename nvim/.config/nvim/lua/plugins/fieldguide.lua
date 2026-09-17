@@ -1,17 +1,20 @@
 -- fieldguide.nvim — an agent that answers from the plugins you actually have,
 -- at the revisions you actually pinned.
 --
--- Local development checkout: `dir` points lazy.nvim straight at the working
--- tree, so edits there are live on the next restart with nothing to sync. The
--- repo lives *outside* this config tree on purpose — that is the read/write
+-- The local development checkout when there is one: `dir` points lazy.nvim
+-- straight at the working tree, so edits there are live on the next restart
+-- with nothing to sync. Without it, lazy.nvim installs from GitHub. The
+-- checkout lives *outside* this config tree on purpose — that is the read/write
 -- zone the agent is confined to, and the plugin should not be inside it.
 --
 -- Repo: https://github.com/jaitd/fieldguide.nvim
+local checkout = vim.fn.expand("~/dev/fieldguide.nvim")
+
 return {
   {
     "jaitd/fieldguide.nvim",
     name = "fieldguide.nvim",
-    dir = vim.fn.expand("~/dev/fieldguide.nvim"),
+    dir = vim.fn.isdirectory(checkout) == 1 and checkout or nil,
     -- No lazy-load trigger: the commands and keymaps below are the entry
     -- points, and setup() is cheap (it registers commands, nothing else).
     lazy = false,
