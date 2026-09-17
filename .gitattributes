@@ -1,0 +1,3 @@
+# Noctalia injects a generated colour palette into starship.toml on every theme
+# change. The clean filter strips it before git sees the file (set up by install.sh).
+starship/.config/starship.toml filter=noctalia-palette

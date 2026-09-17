@@ -65,6 +65,15 @@ for pkg in "${PACKAGES[@]}"; do
   ok "$pkg"
 done
 
+# ── Git filters ──────────────────────────────────────────────────────────
+# Noctalia writes its generated palette into starship.toml; strip it on
+# `git add`/`git status` so theme changes never show up as diffs (.gitattributes).
+printf '\n'; bold "Git filters"
+git -C "$DOTFILES" config filter.noctalia-palette.clean \
+  'perl -0pe '"'"'s/^palette = "noctalia"\n//m; s/\n*# >>> NOCTALIA STARSHIP PALETTE >>>.*?# <<< NOCTALIA STARSHIP PALETTE <<<\n?/\n/s'"'"
+git -C "$DOTFILES" config filter.noctalia-palette.smudge cat
+ok "noctalia-palette (starship.toml)"
+
 # ── Secrets ──────────────────────────────────────────────────────────────
 printf '\n'; bold "Secrets"
 secrets="$HOME/.config/zsh/secrets.zsh"
