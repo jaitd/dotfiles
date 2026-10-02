@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Region screenshot via grim+slurp, then put the file path on the clipboard so it can
+# be pasted into TUIs (Claude Code, etc.) that accept image paths as text.
+set -euo pipefail
+
+dir="$HOME/Pictures/Screenshots"
+mkdir -p "$dir"
+ts=$(date +%Y-%m-%d_%H-%M-%S)
+out="$dir/Screenshot ${ts}.png"
+
+# slurp exits non-zero when the selection is cancelled.
+geom=$(slurp) || exit 0
+grim -g "$geom" "$out"
+
+printf '%s' "$out" | wl-copy
+notify-send -a niri "Screenshot copied" "$out"

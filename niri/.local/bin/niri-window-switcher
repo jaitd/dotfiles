@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Fuzzel-based window switcher for niri. Lists every window with its app_id,
+# title, and workspace; on selection, focuses that window via niri IPC.
+set -euo pipefail
+
+choice=$(niri msg --json windows \
+  | jq -r '.[] | "\(.id)\t\(.app_id // "?")  —  \(.title // "")  [ws \(.workspace_id)]"' \
+  | fuzzel --dmenu --prompt "window: " --width 90 --lines 12) || exit 0
+
+[ -z "$choice" ] && exit 0
+id=${choice%%$'\t'*}
+exec niri msg action focus-window --id "$id"

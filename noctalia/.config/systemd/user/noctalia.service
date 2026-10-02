@@ -1,0 +1,18 @@
+[Unit]
+Description=Noctalia shell
+PartOf=graphical-session.target
+After=graphical-session.target
+Requisite=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/noctalia
+Restart=always
+RestartSec=2
+# Apps started from the launcher get their own scopes (see
+# launch_apps_as_systemd_services), but anything still sharing this cgroup
+# must not take the shell down with it when the kernel OOM-kills it.
+OOMPolicy=continue
+
+[Install]
+WantedBy=graphical-session.target

@@ -1,0 +1,25 @@
+# Hand-written Noctalia config. Noctalia merges every *.toml in this directory,
+# then lets ~/.local/state/noctalia/settings.toml (what the settings UI writes)
+# override it. So anything changed in the UI wins over this file until that key
+# is removed from settings.toml.
+#
+# Machine-specific state — wallpapers, monitor layouts, lockscreen widget
+# geometry, theme palette — is deliberately left in the state file.
+
+[bar.default]
+# Workspace pills replaced by the taskbar, which shows the apps per workspace.
+start = [ "launcher", "wallpaper", "taskbar" ]
+
+[widget.taskbar]
+group_by_workspace = true
+
+[shell]
+# Apps launched from the launcher get their own systemd scopes, so an OOM kill
+# can't stop noctalia.service with them. Needs Noctalia under systemd (it is).
+launch_apps_as_systemd_services = true
+# Graphical authentication dialog for anything needing admin rights.
+polkit_agent = true
+
+[theme.templates]
+# Generates the ghostty and starship palettes from the wallpaper colours.
+builtin_ids = [ "ghostty", "starship" ]

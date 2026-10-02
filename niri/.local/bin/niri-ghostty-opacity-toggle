@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Toggle ghostty unfocused-window transparency in niri config.
+# Cycles the unfocused opacity between 0.75 (transparent) and 1.0 (solid).
+set -euo pipefail
+
+CFG="$HOME/.config/niri/config.kdl"
+DIM=0.8
+FULL=1.0
+
+current=$(awk '
+  /match app-id="com.mitchellh.ghostty"$/ { in_block=1; next }
+  in_block && /opacity / { print $2; exit }
+' "$CFG")
+
+case "$current" in
+  "$DIM")  new="$FULL"; state="solid"  ;;
+  "$FULL") new="$DIM";  state="transparent" ;;
+  *) notify-send -a niri "Ghostty opacity" "Couldn't read current opacity ($current). Aborting."; exit 1 ;;
+esac
+
+python3 - "$CFG" "$current" "$new" <<'PY'
+import re, sys, pathlib
+cfg, cur, new = pathlib.Path(sys.argv[1]), sys.argv[2], sys.argv[3]
+text = cfg.read_text()
+pattern = re.compile(
+    r'(match app-id="com\.mitchellh\.ghostty"\s*\n\s*opacity )' + re.escape(cur)
+)
+text2, n = pattern.subn(r'\g<1>' + new, text, count=1)
+if n != 1:
+    sys.exit("could not match unfocused opacity rule")
+cfg.write_text(text2)
+PY
+
+notify-send -a niri "Ghostty: $state" "unfocused opacity = $new"

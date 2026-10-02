@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Fuzzel-driven picker over ~/.config/niri/grids/*.conf — pick a layout, fire it.
+set -euo pipefail
+
+LAYOUT_DIR="$HOME/.config/niri/grids"
+mkdir -p "$LAYOUT_DIR"
+
+choice=$(
+  find "$LAYOUT_DIR" -maxdepth 1 -name '*.conf' -printf '%f\n' \
+    | sed 's/\.conf$//' \
+    | sort \
+    | fuzzel --dmenu --prompt "layout: " --width 30 --lines 8
+) || exit 0
+
+[[ -z "$choice" ]] && exit 0
+exec /home/jait/.local/bin/niri-grid-2x2 --layout "$choice"

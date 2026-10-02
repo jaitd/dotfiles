@@ -1,0 +1,30 @@
+// Noctalia shell integration (https://docs.noctalia.dev/noctalia/compositor-settings/niri/)
+
+// Noctalia runs as a systemd user service (noctalia.service) so that an app
+// OOM-kill in its cgroup cannot stop the shell, and so it restarts if it dies.
+// Launcher-started apps get their own scopes via launch_apps_as_systemd_services.
+
+// Wallpaper stays put while the overview zooms out (requires [backdrop] disabled
+// in Noctalia, which is the default). layout background-color is transparent in colors.kdl.
+layer-rule {
+    match namespace="^noctalia-wallpaper"
+    place-within-backdrop true
+}
+
+overview {
+    workspace-shadow {
+        off
+    }
+}
+
+// Noctalia settings window
+window-rule {
+    match app-id="dev.noctalia.Noctalia"
+    open-floating true
+    default-column-width { fixed 1080; }
+    default-window-height { fixed 920; }
+}
+
+debug {
+    honor-xdg-activation-with-invalid-serial
+}

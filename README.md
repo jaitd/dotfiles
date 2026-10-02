@@ -14,6 +14,8 @@ Personal dotfiles, managed with [GNU Stow](https://gnu.org/software/stow/).
 | `nvim`     | `~/.config/nvim/`             | Neovim, lazy.nvim, LSP + treesitter |
 | `ghostty`  | `~/.config/ghostty/config`    | [Ghostty](https://ghostty.org) terminal |
 | `claude`   | `~/.claude/`, `~/.claude-personal/` | Claude Code settings + statusline, rendered by Starship to match the shell prompt |
+| `niri`     | `~/.config/niri/`, `~/.local/bin/niri-*` | [niri](https://github.com/YaLTeR/niri) scrolling compositor, its includes and helper scripts |
+| `noctalia` | `~/.config/noctalia/`, `~/.config/systemd/user/noctalia.service` | [Noctalia](https://noctalia.dev) desktop shell: tracked config layer + user service |
 
 The `claude` package covers both accounts: the default profile in `~/.claude`,
 and the personal one in `~/.claude-personal` that the `claude-personal` alias
@@ -21,6 +23,20 @@ selects via `CLAUDE_CONFIG_DIR`. Both point their statusline at the single
 `~/.claude/statusline.sh` symlink, which badges the line with the active
 profile (` default` / `󰋜 personal`) so it is obvious which account a session
 is billing to.
+
+The `niri` package tracks `config.kdl` plus the `conf/` includes it pulls in
+(outputs, cursor, layout, colours, binds, noctalia integration) and the
+`~/.local/bin/niri-*` helpers the binds call. Old backups left in
+`~/.config/niri` stay untracked.
+
+The `noctalia` package tracks only the hand-written config layer,
+`~/.config/noctalia/config.toml`. Noctalia merges that with
+`~/.local/state/noctalia/settings.toml`, which is what the settings UI writes
+and which wins on conflicts — wallpapers, monitor layout and theme palette stay
+there, machine-local and untracked. Its systemd unit is tracked here because
+the shell must run under systemd: apps started from the launcher share its
+cgroup, and `OOMPolicy=continue` keeps an OOM-killed app from taking the shell
+down with it.
 
 ## Install
 

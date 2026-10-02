@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Searchable alias picker. Reads aliases from a fresh interactive zsh (so you
+# get prezto's full set + ~/.config/zsh/aliases.zsh + anything zshrc adds),
+# fuzzel-filters them, and copies the chosen alias name to the clipboard.
+set -euo pipefail
+
+# `alias` output: NAME='COMMAND' (one per line).
+choice=$(
+  zsh -ic 'alias' 2>/dev/null \
+    | awk '{
+        i = index($0, "=")
+        if (i == 0) next
+        name = substr($0, 1, i-1)
+        cmd  = substr($0, i+1)
+        gsub(/^'\''/, "", cmd); gsub(/'\''$/, "", cmd)
+        printf "%-18s  %s\n", name, cmd
+      }' \
+    | sort \
+    | fuzzel --dmenu --prompt "alias: " --width 70 --lines 14
+) || exit 0
+
+[[ -z "$choice" ]] && exit 0
+
+# First whitespace-separated token = alias name.
+name=${choice%% *}
+printf '%s' "$name" | wl-copy
+notify-send -a niri "Alias copied" "$name  (paste with Ctrl+Shift+V)"

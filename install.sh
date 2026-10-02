@@ -7,7 +7,7 @@
 set -euo pipefail
 
 DOTFILES="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ALL_PACKAGES=(zsh starship nvim ghostty claude)
+ALL_PACKAGES=(zsh starship nvim ghostty claude niri noctalia)
 PACKAGES=("${@:-}")
 [[ -z "${PACKAGES[*]}" ]] && PACKAGES=("${ALL_PACKAGES[@]}")
 
@@ -30,6 +30,12 @@ check tree-sitter "builds nvim treesitter parsers"     tree-sitter-cli
 check ghostty     "the terminal"                       ghostty
 check mise        "runtime version manager (.zshrc)"   mise
 check jq          "parses Claude Code statusline JSON"  jq
+check niri        "the compositor"                     niri
+check noctalia    "the desktop shell"                  noctalia-shell
+check fuzzel      "niri alias/grid/window pickers"     fuzzel
+check grim        "niri region screenshots"            grim
+check slurp       "niri region screenshots"            slurp
+check swayidle    "locks and suspends on idle"         swayidle
 
 zprezto="${XDG_CONFIG_HOME:-$HOME/.config}/zsh/.zprezto"
 if [[ -d "$zprezto" ]]; then
@@ -73,6 +79,15 @@ git -C "$DOTFILES" config filter.noctalia-palette.clean \
   'perl -0pe '"'"'s/^palette = "noctalia"\n//m; s/\n*# >>> NOCTALIA STARSHIP PALETTE >>>.*?# <<< NOCTALIA STARSHIP PALETTE <<<\n?/\n/s'"'"
 git -C "$DOTFILES" config filter.noctalia-palette.smudge cat
 ok "noctalia-palette (starship.toml)"
+
+# ── User services ──────────────────────────────────────────────────────────
+# noctalia runs as a user service (not niri spawn-at-startup) so an OOM-killed
+# app in its cgroup cannot stop the shell, and so it restarts if it dies.
+if [[ -e "$HOME/.config/systemd/user/noctalia.service" ]] && command -v systemctl >/dev/null 2>&1; then
+  printf '\n'; bold "User services"
+  systemctl --user daemon-reload
+  systemctl --user enable noctalia.service >/dev/null 2>&1 && ok "noctalia.service enabled"
+fi
 
 # ── Secrets ──────────────────────────────────────────────────────────────
 printf '\n'; bold "Secrets"
